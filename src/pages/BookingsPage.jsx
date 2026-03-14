@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { apiFetch } from "../api";
 
 export default function BookingsPage({ bookings, token, onRefresh }) {
   const [filter, setFilter] = useState("all");
@@ -6,12 +7,12 @@ export default function BookingsPage({ bookings, token, onRefresh }) {
   const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
 
   const updateStatus = async (id, status) => {
-    await fetch(`/api/bookings/${id}`, { method: "PUT", headers, body: JSON.stringify({ status }) });
+    await apiFetch(`/api/bookings/${id}`, { method: "PUT", headers, body: JSON.stringify({ status }) });
     onRefresh();
   };
 
   const updatePayment = async (id, paymentStatus) => {
-    await fetch(`/api/bookings/${id}`, { method: "PUT", headers, body: JSON.stringify({ paymentStatus }) });
+    await apiFetch(`/api/bookings/${id}`, { method: "PUT", headers, body: JSON.stringify({ paymentStatus }) });
     onRefresh();
   };
 

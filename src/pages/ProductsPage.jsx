@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { apiFetch } from "../api";
 
 const MARKETS = [
   { key: "DE", label: "Germany",        currency: "EUR", flag: "🇩🇪" },
@@ -39,7 +40,7 @@ export default function ProductsPage({ token, type }) {
   const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
 
   const load = async () => {
-    const res = await fetch(`/api/products?type=${type}`, { headers });
+    const res = await apiFetch(`/api/products?type=${type}`, { headers });
     if (res.ok) setProducts(await res.json());
   };
 
@@ -82,17 +83,17 @@ export default function ProductsPage({ token, type }) {
 
   const handleDelete = async (id) => {
     if (!confirm("Delete this product?")) return;
-    await fetch(`/api/products/${id}`, { method: "DELETE", headers });
+    await apiFetch(`/api/products/${id}`, { method: "DELETE", headers });
     setProducts(null);
   };
 
   const handleDuplicate = async (id) => {
-    await fetch(`/api/products/${id}/duplicate`, { method: "POST", headers });
+    await apiFetch(`/api/products/${id}/duplicate`, { method: "POST", headers });
     setProducts(null);
   };
 
   const toggleStopSales = async (p) => {
-    await fetch(`/api/products/${p._id}/inventory`, {
+    await apiFetch(`/api/products/${p._id}/inventory`, {
       method: "PATCH", headers,
       body: JSON.stringify({ stopSales: !p.inventory?.stopSales }),
     });

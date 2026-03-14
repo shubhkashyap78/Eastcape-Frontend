@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { apiFetch } from "./api";
 import OverviewPage from "./pages/OverviewPage";
 import BookingsPage from "./pages/BookingsPage";
 import ProductsPage from "./pages/ProductsPage";
@@ -29,11 +30,11 @@ export default function Dashboard({ token, onLogout }) {
   const loadCoreData = async () => {
     try {
       const [meRes, subRes, bookRes, statsRes, prodRes] = await Promise.all([
-        fetch("/api/auth/me",         { headers }),
-        fetch("/api/newsletter",      { headers }),
-        fetch("/api/bookings",        { headers }),
-        fetch("/api/bookings/stats",  { headers }),
-        fetch("/api/products",        { headers }),
+        apiFetch("/api/auth/me",         { headers }),
+        apiFetch("/api/newsletter",      { headers }),
+        apiFetch("/api/bookings",        { headers }),
+        apiFetch("/api/bookings/stats",  { headers }),
+        apiFetch("/api/products",        { headers }),
       ]);
       if (meRes.ok)   setUser((await meRes.json()).user);
       if (subRes.ok)  setSubscribers(await subRes.json());
