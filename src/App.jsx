@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Dashboard from "./Dashboard";
+import { apiFetch } from "./api";
 
 export default function App() {
   const [email, setEmail] = useState("");
@@ -11,9 +12,8 @@ export default function App() {
     e.preventDefault();
     setError("");
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/auth/login`, {
+      const res = await apiFetch("/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
