@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import { apiFetch } from "./api";
@@ -10,8 +10,22 @@ import CartPage from "./website/CartPage";
 function AdminApp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+  const [token, setToken] = useState("");
   const [error, setError] = useState("");
+  const [verifying, setVerifying] = useState(true);
+
+  // On mount — verify stored token with backend
+  useEffect(() => {
+    const stored = localStorage.getItem("token");
+    if (!stored) { setVerifying(false); return; }
+    apiFetch("/api/auth/me", { headers: { Authorization: `Bearer ${stored}` } })
+      .then((r) => {
+        if (r.ok) setToken(stored);
+        else localStorage.removeItem("token");
+      })
+      .catch(() => localStorage.removeItem("token"))
+      .finally(() => setVerifying(false));
+  }, []);
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -35,6 +49,7 @@ function AdminApp() {
     setToken("");
   };
 
+  if (verifying) return <div className="dash-loading">⏳ Verifying...</div>;
   if (token) return <Dashboard token={token} onLogout={onLogout} />;
 
   return (
