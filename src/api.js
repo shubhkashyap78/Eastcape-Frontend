@@ -1,7 +1,4 @@
-const BASE = import.meta.env.VITE_API_URL || "";
-
-// Debug — production me console me dikhega
-console.log("[api] BASE URL:", BASE || "(empty — using relative paths)");
+const BASE = import.meta.env.VITE_API_URL ?? "https://eastcape-backend.vercel.app";
 
 export const apiFetch = (path, options = {}) =>
   fetch(`${BASE}${path}`, {
