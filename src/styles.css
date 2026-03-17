@@ -133,6 +133,14 @@ button:hover {
     grid-template-columns: 1fr;
     padding: 40px 6vw;
   }
+  .hero .brand { font-size: 30px; }
+  .hero .lead { font-size: 15px; }
+}
+
+@media (max-width: 480px) {
+  .page { padding: 24px 5vw; gap: 24px; }
+  .card { padding: 20px; }
+  .hero-logo { width: 70px; height: 70px; }
 }
 
 /* Dashboard */
@@ -504,13 +512,62 @@ code { font-size: 12px; background: #f0e6d8; padding: 2px 6px; border-radius: 4p
 .locale-row { border: 1px solid #e2cbb3; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
 .locale-label { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
 
-@media (max-width: 700px) {
-  .sidebar-open { width: 180px; }
-  .dash-main { padding: 20px; }
-  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+/* ── Admin Mobile Responsive ── */
+@media (max-width: 768px) {
+  .dash-body { position: relative; }
+
+  /* Sidebar becomes overlay on mobile */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 150;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+  }
+  .sidebar-open { width: 240px; }
+  .sidebar-closed { width: 0; overflow: hidden; }
+
+  .dash-main { padding: 16px; width: 100%; }
+  .dash-main h2 { font-size: 20px; margin-bottom: 16px; }
+
+  .dash-header { padding: 10px 14px; }
+  .dash-brand { font-size: 16px; }
+  .dash-user { font-size: 12px; }
+
+  .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stat-num { font-size: 24px; }
+
   .form-grid { grid-template-columns: 1fr; }
   .product-grid { grid-template-columns: 1fr; }
   .market-row { grid-template-columns: 1fr; }
+
+  .page-header { flex-direction: column; align-items: flex-start; }
+  .page-header > div { width: 100%; }
+  .search-input { width: 100%; }
+
+  .filter-tabs { gap: 4px; }
+  .filter-tab { padding: 4px 10px; font-size: 12px; }
+
+  .modal { max-height: 95vh; border-radius: 14px; }
+  .modal-tabs { gap: 2px; }
+  .modal-tab { padding: 6px 8px; font-size: 12px; }
+
+  .table th, .table td { padding: 8px 10px; font-size: 12px; }
+
+  .action-btns { flex-direction: column; }
+  .btn-xs { width: 100%; text-align: center; }
+
+  .bar-chart { gap: 4px; }
+  .bar-label { font-size: 9px; }
+
+  .type-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .dash-header-left gap { gap: 8px; }
+  .dash-brand span { display: none; }
 }
 
 /* ═══════════════════════════════════════
@@ -656,10 +713,35 @@ code { font-size: 12px; background: #f0e6d8; padding: 2px 6px; border-radius: 4p
   .ws-nav-links.ws-nav-open { display: flex; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--ink); padding: 16px 6vw; gap: 16px; z-index: 99; }
   .ws-hamburger { display: block; }
   .ws-gallery-main { height: 260px; }
+  .ws-hero { padding: 48px 4vw 40px; }
+  .ws-hero h1 { font-size: clamp(26px, 6vw, 40px); }
+  .ws-hero p { font-size: 15px; }
+  .ws-search { max-width: 100%; }
+  .ws-detail { padding: 20px 4vw 40px; }
+  .ws-cart-page { padding: 20px 4vw 40px; }
+  .ws-cart-title { font-size: 22px; margin-bottom: 18px; }
+  .ws-enquiry-form { padding: 18px; }
+  .ws-tabs { padding: 16px 4vw 0; gap: 6px; }
+  .ws-tab { padding: 5px 12px; font-size: 13px; }
 }
 
 @media (max-width: 600px) {
   .ws-grid { grid-template-columns: 1fr; padding: 16px 4vw 40px; }
   .ws-form-row { grid-template-columns: 1fr; }
-  .ws-cart-page { padding: 20px 4vw 40px; }
+  .ws-cart-page { padding: 16px 4vw 40px; }
+  .ws-cart-row { gap: 10px; padding: 12px; }
+  .ws-cart-img { width: 60px; height: 50px; }
+  .ws-cart-item-title { font-size: 13px; }
+  .ws-cart-item-price { font-size: 14px; }
+  .ws-cart-total-amount { font-size: 18px; }
+  .ws-detail-info h1 { font-size: 22px; }
+  .ws-price-main { font-size: 20px; }
+  .ws-add-btn-lg { padding: 12px; font-size: 15px; }
+  .ws-gallery-main { height: 220px; }
+  .ws-gallery-thumbs img { width: 56px; height: 44px; }
+  .ws-nav { padding: 10px 4vw; }
+  .ws-nav-brand span { font-size: 16px; }
+  .ws-nav-logo { width: 28px; height: 28px; }
+  .ws-cart-success { padding: 48px 4vw; }
+  .ws-success-icon { font-size: 48px; }
 }

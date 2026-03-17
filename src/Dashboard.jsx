@@ -25,7 +25,7 @@ export default function Dashboard({ token, onLogout }) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [active, setActive] = useState("overview");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > 768);
 
   const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
 
@@ -82,6 +82,13 @@ export default function Dashboard({ token, onLogout }) {
       </header>
 
       <div className="dash-body">
+        {/* Sidebar overlay backdrop on mobile */}
+        {sidebarOpen && window.innerWidth <= 768 && (
+          <div
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", zIndex: 140 }}
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
         {/* ── Sidebar ── */}
         <aside className={`sidebar ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
           <nav>
@@ -91,7 +98,7 @@ export default function Dashboard({ token, onLogout }) {
                 <button
                   key={key}
                   className={`sidebar-item ${active === key ? "sidebar-item-active" : ""}`}
-                  onClick={() => setActive(key)}
+                  onClick={() => { setActive(key); if (window.innerWidth <= 768) setSidebarOpen(false); }}
                 >
                   <span className="sidebar-icon">{icon}</span>
                   {sidebarOpen && (
