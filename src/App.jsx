@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import { apiFetch } from "./api";
@@ -7,25 +7,29 @@ import HomePage from "./website/HomePage";
 import ProductDetailPage from "./website/ProductDetailPage";
 import CartPage from "./website/CartPage";
 
+// Decode JWT payload locally — no network call needed
+const getStoredToken = () => {
+  const t = localStorage.getItem("token");
+  if (!t) return "";
+  try {
+    const payload = JSON.parse(atob(t.split(".")[1]));
+    // Expired?
+    if (payload.exp && payload.exp * 1000 < Date.now()) {
+      localStorage.removeItem("token");
+      return "";
+    }
+    return t;
+  } catch {
+    localStorage.removeItem("token");
+    return "";
+  }
+};
+
 function AdminApp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(() => getStoredToken());
   const [error, setError] = useState("");
-  const [verifying, setVerifying] = useState(true);
-
-  // On mount — verify stored token with backend
-  useEffect(() => {
-    const stored = localStorage.getItem("token");
-    if (!stored) { setVerifying(false); return; }
-    apiFetch("/api/auth/me", { headers: { Authorization: `Bearer ${stored}` } })
-      .then((r) => {
-        if (r.ok) setToken(stored);
-        else localStorage.removeItem("token");
-      })
-      .catch(() => localStorage.removeItem("token"))
-      .finally(() => setVerifying(false));
-  }, []);
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -49,7 +53,6 @@ function AdminApp() {
     setToken("");
   };
 
-  if (verifying) return <div className="dash-loading">⏳ Verifying...</div>;
   if (token) return <Dashboard token={token} onLogout={onLogout} />;
 
   return (
