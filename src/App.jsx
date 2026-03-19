@@ -6,6 +6,11 @@ import WebsiteLayout from "./website/WebsiteLayout";
 import HomePage from "./website/HomePage";
 import ProductDetailPage from "./website/ProductDetailPage";
 import CartPage from "./website/CartPage";
+import HotelsPage from "./website/HotelsPage";
+import ToursPage from "./website/ToursPage";
+import PackagesPage from "./website/PackagesPage";
+import VehiclesPage from "./website/VehiclesPage";
+import ContactPage from "./website/ContactPage";
 
 // Decode JWT payload locally — no network call needed
 const getStoredToken = () => {
@@ -88,6 +93,11 @@ export default function App() {
       {/* Public website */}
       <Route path="/" element={<WebsiteLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="hotels" element={<HotelsPage />} />
+        <Route path="tours" element={<ToursPage />} />
+        <Route path="packages" element={<PackagesPage />} />
+        <Route path="vehicles" element={<VehiclesPage />} />
+        <Route path="contact" element={<ContactPage />} />
         <Route path="product/:id" element={<ProductDetailPage />} />
         <Route path="cart" element={<CartPage />} />
       </Route>

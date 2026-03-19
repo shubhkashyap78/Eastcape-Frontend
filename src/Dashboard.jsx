@@ -5,21 +5,24 @@ import BookingsPage from "./pages/BookingsPage";
 import ProductsPage from "./pages/ProductsPage";
 import SubscribersPage from "./pages/SubscribersPage";
 import UsersPage from "./pages/UsersPage";
+import EnquiriesPage from "./pages/EnquiriesPage";
 
 const NAV_ITEMS = [
-  { key: "overview",     label: "Dashboard",   icon: "🏠" },
-  { key: "bookings",     label: "Bookings",    icon: "📋" },
-  { key: "hotel",        label: "Hotels",      icon: "🏨" },
-  { key: "tour",         label: "Tours",       icon: "🗺️" },
-  { key: "package",      label: "Packages",    icon: "📦" },
-  { key: "vehicle",      label: "Vehicles",    icon: "🚗" },
-  { key: "subscribers",  label: "Subscribers", icon: "📧" },
-  { key: "users",        label: "Team",        icon: "👥" },
+  { key: "overview",    label: "Dashboard",   icon: "🏠" },
+  { key: "enquiries",   label: "Enquiries",   icon: "📬" },
+  { key: "bookings",    label: "Bookings",    icon: "📋" },
+  { key: "hotel",       label: "Hotels",      icon: "🏨" },
+  { key: "tour",        label: "Tours",       icon: "🗺️" },
+  { key: "package",     label: "Packages",    icon: "📦" },
+  { key: "vehicle",     label: "Vehicles",    icon: "🚗" },
+  { key: "subscribers", label: "Subscribers", icon: "📧" },
+  { key: "users",       label: "Team",        icon: "👥" },
 ];
 
 export default function Dashboard({ token, onLogout }) {
   const [subscribers, setSubscribers] = useState([]);
   const [bookings, setBookings] = useState([]);
+  const [enquiryCount, setEnquiryCount] = useState(0);
   const [stats, setStats] = useState(null);
   const [productCounts, setProductCounts] = useState({});
   const [loading, setLoading] = useState(true);
@@ -31,17 +34,19 @@ export default function Dashboard({ token, onLogout }) {
 
   const loadCoreData = async () => {
     try {
-      const [meRes, subRes, bookRes, statsRes, prodRes] = await Promise.all([
+      const [meRes, subRes, bookRes, statsRes, prodRes, enqRes] = await Promise.all([
         apiFetch("/api/auth/me",         { headers }),
         apiFetch("/api/newsletter",      { headers }),
         apiFetch("/api/bookings",        { headers }),
         apiFetch("/api/bookings/stats",  { headers }),
         apiFetch("/api/products",        { headers }),
+        apiFetch("/api/enquiries",       { headers }),
       ]);
       if (meRes.ok)   setUser((await meRes.json()).user);
       if (subRes.ok)  setSubscribers(await subRes.json());
       if (bookRes.ok) setBookings(await bookRes.json());
       if (statsRes.ok) setStats(await statsRes.json());
+      if (enqRes.ok)  { const enqs = await enqRes.json(); setEnquiryCount(enqs.filter((e) => e.status === "new").length); }
       if (prodRes.ok) {
         const prods = await prodRes.json();
         const counts = {};
@@ -61,6 +66,7 @@ export default function Dashboard({ token, onLogout }) {
     if (key === "overview")     return null;
     if (key === "subscribers")  return subscribers.length;
     if (key === "bookings")     return stats?.bookings?.total ?? bookings.length;
+    if (key === "enquiries")    return enquiryCount || null;
     return productCounts[key] ?? 0;
   };
 
@@ -143,6 +149,10 @@ export default function Dashboard({ token, onLogout }) {
 
           {active === "users" && (
             <UsersPage token={token} />
+          )}
+
+          {active === "enquiries" && (
+            <EnquiriesPage token={token} />
           )}
         </main>
       </div>

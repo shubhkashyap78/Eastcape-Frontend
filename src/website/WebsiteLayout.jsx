@@ -15,10 +15,12 @@ function Navbar() {
       </Link>
 
       <div className={`ws-nav-links ${menuOpen ? "ws-nav-open" : ""}`}>
-        <Link to="/?type=hotel"   onClick={() => setMenuOpen(false)}>Hotels</Link>
-        <Link to="/?type=tour"    onClick={() => setMenuOpen(false)}>Tours</Link>
-        <Link to="/?type=package" onClick={() => setMenuOpen(false)}>Packages</Link>
-        <Link to="/?type=vehicle" onClick={() => setMenuOpen(false)}>Vehicles</Link>
+        <Link to="/"        onClick={() => setMenuOpen(false)}>🏠 Home</Link>
+        <Link to="/hotels"   onClick={() => setMenuOpen(false)}>🏨 Hotels</Link>
+        <Link to="/tours"    onClick={() => setMenuOpen(false)}>🗺️ Tours</Link>
+        <Link to="/packages" onClick={() => setMenuOpen(false)}>📦 Packages</Link>
+        <Link to="/vehicles" onClick={() => setMenuOpen(false)}>🚗 Vehicles</Link>
+        <Link to="/contact"  onClick={() => setMenuOpen(false)}>📬 Contact</Link>
       </div>
 
       <div className="ws-nav-right">
