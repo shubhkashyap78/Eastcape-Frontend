@@ -111,27 +111,31 @@ export default function CartPage() {
                   </div>
 
                   {/* Tour: age-based guest counters */}
-                  {isTour && typeof g === "object" && (
-                    <div className="ws-cart-tour-guests">
-                      {[
-                        { key: "adults",   label: "Adults (11+ yrs)",   price: item.basePrice,  emoji: "👨" },
-                        { key: "children", label: "Children (5–11 yrs)", price: item.childPrice, emoji: "🧒" },
-                        { key: "infants",  label: "Infants (0–5 yrs)",   price: 0,               emoji: "👶" },
-                      ].map(({ key, label, price, emoji }) => (
-                        <div className="ws-cart-guest-row" key={key}>
-                          <span className="ws-cart-guest-label">{emoji} {label}</span>
-                          <div className="ws-qty">
-                            <button onClick={() => updateTourGuests(item._id, key, -1)}>−</button>
-                            <span>{g[key]}</span>
-                            <button onClick={() => updateTourGuests(item._id, key, 1)}>+</button>
+                  {isTour && typeof g === "object" && (() => {
+                    const adultPrice = item.basePrice || 0;
+                    const childPrice = item.childPrice || Math.round(adultPrice / 2);
+                    return (
+                      <div className="ws-cart-tour-guests">
+                        {[
+                          { key: "adults",   label: "Adults (11+ yrs)",   price: adultPrice, emoji: "👨" },
+                          { key: "children", label: "Children (5–11 yrs)", price: childPrice, emoji: "🧒" },
+                          { key: "infants",  label: "Infants (0–5 yrs)",   price: 0,          emoji: "👶" },
+                        ].map(({ key, label, price, emoji }) => (
+                          <div className="ws-cart-guest-row" key={key}>
+                            <span className="ws-cart-guest-label">{emoji} {label}</span>
+                            <div className="ws-qty">
+                              <button onClick={() => updateTourGuests(item._id, key, -1)}>−</button>
+                              <span>{g[key]}</span>
+                              <button onClick={() => updateTourGuests(item._id, key, 1)}>+</button>
+                            </div>
+                            <span className="ws-cart-guest-price">
+                              {price === 0 ? "Free" : `${item.baseCurrency} ${(price * g[key]).toLocaleString()}`}
+                            </span>
                           </div>
-                          <span className="ws-cart-guest-price">
-                            {price === 0 ? "Free" : `${item.baseCurrency} ${(price * g[key]).toLocaleString()}`}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                        ))}
+                      </div>
+                    );
+                  })()}
 
                   {/* Non-tour: simple guest count */}
                   {!isTour && item.type !== "vehicle" && (
