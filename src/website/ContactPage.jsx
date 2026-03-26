@@ -65,7 +65,7 @@ export default function ContactPage() {
             <h3>Call Us</h3>
             <p>Our team is available Mon–Sat, 8am–6pm</p>
             <div className="cp-phone-list">
-              <a href="tel:+2305729247" className="cp-phone">+230 5729 2475</a>
+              {/*<a href="tel:+2305729247" className="cp-phone">+230 5729 2475</a>*/}
               <a href="tel:+2305793980" className="cp-phone">+230 5793 9800</a>
             </div>
           </div>
