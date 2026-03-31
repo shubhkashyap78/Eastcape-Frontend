@@ -121,10 +121,10 @@ function InvoiceDocument({ booking }) {
                   <span>Subtotal</span><span>{fmtMoney(bk.currency, subtotal)}</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 14px", fontSize: 13, borderBottom: "1px solid #f0e6d8", color: "#6b5b4a" }}>
-                  <span>GST (15%) — VAT Reg: {VAT_REG_NO}</span><span>{fmtMoney(bk.currency, gst)}</span>
+                  <span>VAT (15%) — VAT Reg: {VAT_REG_NO}</span><span>{fmtMoney(bk.currency, gst)}</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 14px", background: "#1d1a15", color: "#fff", fontSize: 15, fontWeight: 700 }}>
-                  <span>TOTAL (incl. GST)</span><span style={{ color: "#f4a261" }}>{fmtMoney(bk.currency, bk.totalAmount)}</span>
+                  <span>TOTAL (incl. VAT)</span><span style={{ color: "#f4a261" }}>{fmtMoney(bk.currency, bk.totalAmount)}</span>
                 </div>
               </>
             );
@@ -183,7 +183,7 @@ export default function InvoicePage({ bookingId, token, onClose }) {
       `*Guests:* ${bk.guests || 1}`,
       ``,
       `*Subtotal:* ${fmtMoney(bk.currency, subtotal)}`,
-      `*GST (15%):* ${fmtMoney(bk.currency, gst)}`,
+      `*VAT (15%):* ${fmtMoney(bk.currency, gst)}`,
       `*Total (incl. GST):* ${fmtMoney(bk.currency, bk.totalAmount)}`,
       `*VAT Reg No:* ${VAT_REG_NO}`,
       `*Payment Status:* ${bk.paymentStatus}`,

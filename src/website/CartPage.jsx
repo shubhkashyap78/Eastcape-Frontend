@@ -40,7 +40,7 @@ export default function CartPage() {
               guestBreakdown: typeof item.guests === "object" ? item.guests : undefined,
               checkIn: item.type === "tour" ? (form.tourDate || undefined) : (form.checkIn || undefined),
               checkOut: item.type === "tour" ? undefined : (form.checkOut || undefined),
-              totalAmount: Math.round((item.lineTotal ?? item.basePrice * item.guests) * (1 + GST_RATE)),
+              totalAmount: Math.round((item.lineTotal ?? item.basePrice * item.guests) * (1 + VAT_RATE)),
               currency: item.baseCurrency,
               notes: form.notes,
               status: "pending",
@@ -72,7 +72,7 @@ export default function CartPage() {
     );
   }
 
-  const GST_RATE = 0.15;
+  const VAT_RATE = 0.15;
 
   const grandTotal = items.reduce((acc, item) => {
     const cur = item.baseCurrency || "USD";
@@ -80,8 +80,8 @@ export default function CartPage() {
     return acc;
   }, {});
 
-  const grandTotalWithGST = Object.fromEntries(
-    Object.entries(grandTotal).map(([cur, amt]) => [cur, amt + amt * GST_RATE])
+  const grandTotalWithVAT = Object.fromEntries(
+    Object.entries(grandTotal).map(([cur, amt]) => [cur, amt + amt * VAT_RATE])
   );
 
   return (
@@ -176,13 +176,13 @@ export default function CartPage() {
               <span>{Object.entries(grandTotal).map(([cur, amt]) => `${cur} ${amt.toLocaleString()}`).join(" + ")}</span>
             </div>
             <div className="ws-cart-total-row" style={{ background: "#f9f4ef", fontSize: 14 }}>
-              <span>GST (15%)</span>
-              <span>{Object.entries(grandTotal).map(([cur, amt]) => `${cur} ${Math.round(amt * GST_RATE).toLocaleString()}`).join(" + ")}</span>
+              <span>VAT (15%)</span>
+              <span>{Object.entries(grandTotal).map(([cur, amt]) => `${cur} ${Math.round(amt * VAT_RATE).toLocaleString()}`).join(" + ")}</span>
             </div>
             <div className="ws-cart-total-row" style={{ borderTop: "2px solid #e2cbb3" }}>
-              <span>Total (incl. GST)</span>
+              <span>Total (incl. VAT)</span>
               <span className="ws-cart-total-amount">
-                {Object.entries(grandTotalWithGST).map(([cur, amt]) => `${cur} ${Math.round(amt).toLocaleString()}`).join(" + ")}
+                {Object.entries(grandTotalWithVAT).map(([cur, amt]) => `${cur} ${Math.round(amt).toLocaleString()}`).join(" + ")}
               </span>
             </div>
             <button className="ws-clear-btn" onClick={clearCart}>Clear Cart</button>
