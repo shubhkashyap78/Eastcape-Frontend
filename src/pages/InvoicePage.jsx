@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "../api";
 
+const GST_RATE = 0.15;
+const VAT_REG_NO = "VAT27223119";
+
 const fmtDate = (v) =>
   v ? new Date(v).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "—";
 const fmtMoney = (currency, amount) =>
@@ -32,6 +35,7 @@ function InvoiceDocument({ booking }) {
           />
           <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: 1 }}>Eastcape Booking</div>
           <div style={{ fontSize: 13, color: "#6b5b4a", marginTop: 2 }}>Mauritius Travel &amp; Tours</div>
+          <div style={{ marginTop: 4, fontSize: 12, color: "#6b5b4a", fontWeight: 700 }}>VAT Reg No: {VAT_REG_NO}</div>
           <div style={{ marginTop: 10, fontSize: 12, color: "#6b5b4a", lineHeight: 1.8 }}>
             <div>📍 Mauritius, Indian Ocean</div>
             <div>📞 +230 5729 2475</div>
@@ -108,12 +112,23 @@ function InvoiceDocument({ booking }) {
       {/* Total */}
       <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 24 }}>
         <div style={{ minWidth: 260, border: "1px solid #e2cbb3", borderTop: "none", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 14px", fontSize: 13, borderBottom: "1px solid #f0e6d8" }}>
-            <span>Subtotal</span><span>{fmtMoney(bk.currency, bk.totalAmount)}</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 14px", background: "#1d1a15", color: "#fff", fontSize: 15, fontWeight: 700 }}>
-            <span>TOTAL</span><span style={{ color: "#f4a261" }}>{fmtMoney(bk.currency, bk.totalAmount)}</span>
-          </div>
+          {(() => {
+            const subtotal = bk.totalAmount / (1 + GST_RATE);
+            const gst = bk.totalAmount - subtotal;
+            return (
+              <>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 14px", fontSize: 13, borderBottom: "1px solid #f0e6d8" }}>
+                  <span>Subtotal</span><span>{fmtMoney(bk.currency, subtotal)}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 14px", fontSize: 13, borderBottom: "1px solid #f0e6d8", color: "#6b5b4a" }}>
+                  <span>GST (15%) — VAT Reg: {VAT_REG_NO}</span><span>{fmtMoney(bk.currency, gst)}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 14px", background: "#1d1a15", color: "#fff", fontSize: 15, fontWeight: 700 }}>
+                  <span>TOTAL (incl. GST)</span><span style={{ color: "#f4a261" }}>{fmtMoney(bk.currency, bk.totalAmount)}</span>
+                </div>
+              </>
+            );
+          })()}
         </div>
       </div>
 
@@ -153,6 +168,8 @@ export default function InvoicePage({ bookingId, token, onClose }) {
   const handleWhatsApp = () => {
     if (!booking) return;
     const bk = booking;
+    const subtotal = bk.totalAmount / (1 + GST_RATE);
+    const gst = bk.totalAmount - subtotal;
     const msg = [
       `*INVOICE — Eastcape Booking*`,
       `📋 Ref: ${bk.bookingRef || bk._id}`,
@@ -165,7 +182,10 @@ export default function InvoicePage({ bookingId, token, onClose }) {
       `*Check Out:* ${fmtDate(bk.checkOut)}`,
       `*Guests:* ${bk.guests || 1}`,
       ``,
-      `*Total: ${fmtMoney(bk.currency, bk.totalAmount)}*`,
+      `*Subtotal:* ${fmtMoney(bk.currency, subtotal)}`,
+      `*GST (15%):* ${fmtMoney(bk.currency, gst)}`,
+      `*Total (incl. GST):* ${fmtMoney(bk.currency, bk.totalAmount)}`,
+      `*VAT Reg No:* ${VAT_REG_NO}`,
       `*Payment Status:* ${bk.paymentStatus}`,
       ``,
       `Thank you for choosing Eastcape Booking 🌴`,
