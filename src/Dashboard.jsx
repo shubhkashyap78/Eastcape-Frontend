@@ -42,7 +42,7 @@ export default function Dashboard({ token, onLogout }) {
         apiFetch("/api/products",        { headers }),
         apiFetch("/api/enquiries",       { headers }),
       ]);
-      if (meRes.ok)   setUser((await meRes.json()).user);
+      if (meRes.ok) { const meData = await meRes.json(); setUser(meData.user); }
       if (subRes.ok)  setSubscribers(await subRes.json());
       if (bookRes.ok) setBookings(await bookRes.json());
       if (statsRes.ok) setStats(await statsRes.json());
@@ -61,6 +61,12 @@ export default function Dashboard({ token, onLogout }) {
   useEffect(() => { loadCoreData(); }, [token]);
 
   if (loading) return <div className="dash-loading">⏳ Loading...</div>;
+
+  const isAdmin = user?.role === "admin";
+  const userPerms = user?.permissions || [];
+  const canAccess = (key) => isAdmin || userPerms.includes(key);
+
+  const visibleNavItems = NAV_ITEMS.filter(({ key }) => canAccess(key));
 
   const badgeCount = (key) => {
     if (key === "overview")     return null;
@@ -98,7 +104,7 @@ export default function Dashboard({ token, onLogout }) {
         {/* ── Sidebar ── */}
         <aside className={`sidebar ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
           <nav>
-            {NAV_ITEMS.map(({ key, label, icon }) => {
+            {visibleNavItems.map(({ key, label, icon }) => {
               const count = badgeCount(key);
               return (
                 <button
