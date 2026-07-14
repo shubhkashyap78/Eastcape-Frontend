@@ -21,7 +21,7 @@ export default function ProductDetailPage() {
   }, [id]);
 
   if (loading) return <div className="ws-loading">⏳ Loading...</div>;
-  if (!product?._id) return <div className="ws-empty">Product not found. <button onClick={() => navigate("/")}>Go back</button></div>;
+  if (!product?._id) return <div className="ws-empty">Product not found. <button onClick={() => navigate("/website")}>Go back</button></div>;
 
   const images = product.media?.filter((m) => m.type === "image") || [];
   const inCart = items.some((i) => i._id === product._id);

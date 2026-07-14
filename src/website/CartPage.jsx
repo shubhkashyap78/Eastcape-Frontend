@@ -67,7 +67,7 @@ export default function CartPage() {
         <div className="ws-success-icon">🎉</div>
         <h2>Booking Enquiry Sent!</h2>
         <p>{success}</p>
-        <button className="ws-add-btn-lg" onClick={() => navigate("/")}>Continue Browsing</button>
+        <button className="ws-add-btn-lg" onClick={() => navigate("/website")}>Continue Browsing</button>
       </div>
     );
   }
@@ -89,7 +89,7 @@ export default function CartPage() {
       <h2 className="ws-cart-title">🛒 Your Cart</h2>
 
       {items.length === 0 ? (
-        <div className="ws-empty">Your cart is empty. <Link to="/">Browse products →</Link></div>
+        <div className="ws-empty">Your cart is empty. <Link to="/website">Browse products →</Link></div>
       ) : (
         <div className="ws-cart-layout">
           {/* Cart Items */}

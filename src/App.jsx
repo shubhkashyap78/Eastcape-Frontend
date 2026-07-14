@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import { apiFetch } from "./api";
 import WebsiteLayout from "./website/WebsiteLayout";
@@ -35,6 +35,7 @@ function AdminApp() {
   const [password, setPassword] = useState("");
   const [token, setToken] = useState(() => getStoredToken());
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -48,6 +49,7 @@ function AdminApp() {
       if (!res.ok) throw new Error(data.message || "Login failed");
       localStorage.setItem("token", data.token);
       setToken(data.token);
+      navigate("/admin", { replace: true });
     } catch (err) {
       setError(err.message || "Login failed");
     }
@@ -91,7 +93,7 @@ export default function App() {
   return (
     <Routes>
       {/* Public website */}
-      <Route path="/" element={<WebsiteLayout />}>
+      <Route path="/website" element={<WebsiteLayout />}>
         <Route index element={<HomePage />} />
         <Route path="hotels" element={<HotelsPage />} />
         <Route path="tours" element={<ToursPage />} />
@@ -102,7 +104,8 @@ export default function App() {
         <Route path="cart" element={<CartPage />} />
       </Route>
 
-      {/* Admin */}
+      {/* Admin — root aur /admin dono pe */}
+      <Route path="/" element={<AdminApp />} />
       <Route path="/admin/*" element={<AdminApp />} />
 
       {/* Fallback */}

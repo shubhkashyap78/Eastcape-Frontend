@@ -9,22 +9,22 @@ function Navbar() {
 
   return (
     <nav className="ws-nav">
-      <Link to="/" className="ws-nav-brand">
+      <Link to="/website" className="ws-nav-brand">
         <img src="/assests/logo.jpeg" alt="Eastcape" className="ws-nav-logo" />
         <span>Eastcape</span>
       </Link>
 
       <div className={`ws-nav-links ${menuOpen ? "ws-nav-open" : ""}`}>
-        <Link to="/"        onClick={() => setMenuOpen(false)}>🏠 Home</Link>
-        <Link to="/hotels"   onClick={() => setMenuOpen(false)}>🏨 Hotels</Link>
-        <Link to="/tours"    onClick={() => setMenuOpen(false)}>🌊 Sea Activities</Link>
-        <Link to="/packages" onClick={() => setMenuOpen(false)}>📦 Packages</Link>
-        <Link to="/vehicles" onClick={() => setMenuOpen(false)}>🚗 Vehicles</Link>
-        <Link to="/contact"  onClick={() => setMenuOpen(false)}>📬 Contact</Link>
+        <Link to="/website"          onClick={() => setMenuOpen(false)}>🏠 Home</Link>
+        <Link to="/website/hotels"   onClick={() => setMenuOpen(false)}>🏨 Hotels</Link>
+        <Link to="/website/tours"    onClick={() => setMenuOpen(false)}>🌊 Sea Activities</Link>
+        <Link to="/website/packages" onClick={() => setMenuOpen(false)}>📦 Packages</Link>
+        <Link to="/website/vehicles" onClick={() => setMenuOpen(false)}>🚗 Vehicles</Link>
+        <Link to="/website/contact"  onClick={() => setMenuOpen(false)}>📬 Contact</Link>
       </div>
 
       <div className="ws-nav-right">
-        <button className="ws-cart-btn" onClick={() => navigate("/cart")}>
+        <button className="ws-cart-btn" onClick={() => navigate("/website/cart")}>
           🛒 {items.length > 0 && <span className="ws-cart-badge">{items.length}</span>}
         </button>
         <button className="ws-hamburger" onClick={() => setMenuOpen((o) => !o)}>☰</button>
@@ -43,7 +43,7 @@ export default function WebsiteLayout() {
         </main>
         <footer className="ws-footer">
           © {new Date().getFullYear()} Eastcape Booking. All rights reserved.
-          &nbsp;|&nbsp; <Link to="/admin">Admin</Link>
+          &nbsp;|&nbsp; <Link to="/">Admin</Link>
         </footer>
       </div>
     </CartProvider>
